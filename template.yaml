@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Minimal Example
+
+Resources:
+  MinimalExample:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 256
+      ImageUri: minimalexample:latest
+      Timeout: 15
+      Events:
+        MinimalExampleApi:
+          Type: Api
+          Properties:
+            Path: /example
+            Method: get
+    Metadata:
+      DockerTag: latest
+      DockerContext: ./MinimalExample
+      Dockerfile: Dockerfile
+
+Outputs:
+  MinimalExampleApi:
+    Description: "API Gateway endpoint URL for Prod stage for Minimal Example function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  MinimalExampleFunction:
+    Description: "Minimal Example Lambda Function ARN"
+    Value: !GetAtt MinimalExampleFunction.Arn
+  MinimalExampleFunctionIamRole:
+    Description: "Implicit IAM Role created for Minimal Example function"
+    Value: !GetAtt MinimalExampleFunctionRole.Arn
